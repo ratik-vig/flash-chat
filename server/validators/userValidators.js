@@ -12,14 +12,24 @@ const createUser = [
         }
         return true
     }), 
-    
     (req, res, next) => {
         const errors = validationResult(req)
         if(!errors.isEmpty()){
             res.status(400).send({errors: errors.array()})
+        }else{
+            next()
         }
-        next()
     }
 ]
 
-module.exports = {createUser}
+const loginUser = [
+    body('email').isEmail().withMessage('Enter a valid email address'),
+    body('password').isLength({min: 8}).withMessage('Password must have 8 characters'),
+    (req, res, next) => {
+        const errors = validationResult(req)
+        if(!errors.isEmpty()) res.status(400).send({errors: errors.array()})
+        else next()
+    }
+]
+
+module.exports = {createUser, loginUser}
