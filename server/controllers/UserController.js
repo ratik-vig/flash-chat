@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const db = require('../utils/db')
 const queries = require('../utils/queries')
 const userValidators  = require('../validators/userValidators')
+const auth = require('../utils/auth')
 
 const router = express()
 router.use(express.json())
@@ -52,6 +53,10 @@ router.post('/login', userValidators.loginUser, (req, res) => {
             res.status(401).send({error: "Incorrect password"})
         }
     })
+})
+
+router.post('/test', auth,(req, res) => {
+    res.status(200).send('protected route')
 })
 
 module.exports = router
