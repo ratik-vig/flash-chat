@@ -1,5 +1,6 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const db = require('../utils/db')
 const queries = require('../utils/queries')
@@ -41,11 +42,15 @@ router.post('/login', userValidators.loginUser, (req, res) => {
         }
         const passwordMatch = bcrypt.compareSync(password, result[0].fc_user_password)
         if(passwordMatch){
-            res.sendStatus(200)
+            jwt.sign({
+                data: result[0]
+              }, process.env.JWT_SECRET, { expiresIn: '1d' }, (err, token) => {
+                if(err) throw err
+                res.status(200).send(token)
+              })
         }else{
             res.status(401).send({error: "Incorrect password"})
         }
-        
     })
 })
 
