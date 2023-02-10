@@ -3,6 +3,7 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 
 const userController = require('./controllers/UserController')
+const conversationController = require('./controllers/ConversationController')
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/users', userController)
+app.use('/api/v1/conversations', conversationController)
 
 const PORT = process.env.PORT || 3000
 
